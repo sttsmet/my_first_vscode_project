@@ -1,0 +1,27 @@
+\section{Introduction}
+
+Citation graphs encode how scientific ideas propagate, combine, and influence later work.
+Similarity measures on these graphs support information retrieval, expert discovery,
+recommendation, and scientometric analysis. Traditional approaches such as co-citation and
+bibliographic coupling capture useful local signals, while more recent graph-based methods
+model higher-order structure through random walks, propagation, and learned embeddings.
+
+This paper focuses on an operator-based view of similarity. Rather than committing to a
+single heuristic, we define a family of linear or nonlinear operators over the citation
+graph and study how induced similarities transfer from scientific articles to researchers.
+This viewpoint makes it easier to compare methods under a common mathematical language and
+to reason about stability, normalization, and scale transitions.
+
+Our working questions are:
+\begin{enumerate}[label=(Q\arabic*)]
+    \item Which operators recover well-known citation similarity measures as special cases?
+    \item How should document-level similarity be aggregated to produce researcher-level
+    similarity without introducing severe popularity bias?
+    \item What empirical differences appear when moving from article ranking tasks to
+    researcher ranking tasks?
+\end{enumerate}
+
+The rest of the article is organized as follows. Section~\ref{sec:related-work} reviews
+relevant literature. Section~\ref{sec:methodology} presents the operator-based framework.
+Section~\ref{sec:experiments} outlines an experimental protocol, and
+Section~\ref{sec:conclusion} closes with directions for further work.
