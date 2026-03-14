@@ -19,12 +19,76 @@
 
 \maketitle
 
-\input{sections/abstract}
-\input{sections/introduction}
-\input{sections/related_work}
-\input{sections/methodology}
-\input{sections/experiments}
-\input{sections/conclusion}
+\begin{abstract}
+We study similarity in citation graphs through an operator-based perspective that unifies
+local overlap, path-based proximity, and diffusion-style propagation. The central goal is
+to relate article-level similarity to researcher-level similarity by constructing operators
+that act on the citation network and can be lifted from documents to authors through
+authorship incidence mappings. This project template provides a starting point for a full
+article, including a modular section layout and a bibliography file for iterative writing.
+\end{abstract}
+
+\section{Introduction}
+
+Citation graphs encode how scientific ideas propagate, combine, and influence later work.
+Similarity measures on these graphs support information retrieval, expert discovery,
+recommendation, and scientometric analysis. Traditional approaches such as co-citation and
+bibliographic coupling capture useful local signals, while more recent graph-based methods
+model higher-order structure through random walks, propagation, and learned embeddings.
+
+This paper focuses on an operator-based view of similarity. Rather than committing to a
+single heuristic, we define a family of linear or nonlinear operators over the citation
+graph and study how induced similarities transfer from scientific articles to researchers.
+This viewpoint makes it easier to compare methods under a common mathematical language and
+to reason about stability, normalization, and scale transitions.
+
+Our working questions are:
+\begin{enumerate}[label=(Q\arabic*)]
+    \item Which operators recover well-known citation similarity measures as special cases?
+    \item How should document-level similarity be aggregated to produce researcher-level
+    similarity without introducing severe popularity bias?
+    \item What empirical differences appear when moving from article ranking tasks to
+    researcher ranking tasks?
+\end{enumerate}
+
+\section{Related work}
+
+Research on similarity in scholarly networks over the last ten years has developed mainly along two connected lines: paper-level similarity and researcher-level similarity. Even though the two problems are clearly related, the international literature usually does not treat them within one unified mathematical framework. Most studies focus either on \emph{literature recommendation} and \emph{similar paper retrieval}, or on \emph{collaborator recommendation} and \emph{expert finding}. Recent surveys show that these two families of applications dominate scholarly recommendation systems. In that setting, similarity is usually used as a practical retrieval tool rather than as a single, interpretable, and transferable metric that moves naturally from papers to researchers \cite{zhang2023scholarly}.
+
+\subsection{Structural approaches at the paper level}
+
+The main starting point in this literature is still the citation graph. Classical relations such as \emph{bibliographic coupling}, \emph{co-citation}, and direct citation remain strong baselines because they provide interpretable and easy-to-compute forms of relatedness. At the same time, more recent work has tried to improve these classical structures by taking citation context more seriously. For example, Habib and Afzal extend bibliographic coupling by considering the section in which citations appear, instead of treating all shared references as equally informative \cite{habib2019sections}. In a similar spirit, Yun proposes the \emph{node split network}, where bibliographic coupling and co-citation can be seen as special cases of a more general transformation of the citation graph \cite{yun2022nodesplit}.
+
+A more recent step in the citation-based line is that similarity is no longer defined only by counting common neighbors. \emph{RefCit2vec} shows that embeddings based only on ``references'' and ``cited-by'' relations can produce continuous similarity scores even in very sparse networks, where most paper pairs are not linked by bibliographic coupling or co-citation \cite{huang2024refcit2vec}. In the same direction, but with a clearer theoretical focus, Varga, Kojaku, and Silva define similarity through transition probabilities of random walkers on the citation network. This is especially important because the same framework allows a natural move from \emph{paper similarity} to \emph{author similarity}, creating an interpretable link between the two levels of analysis \cite{varga2025transition}.
+
+\subsection{Semantic representations and document embeddings}
+
+The second major direction is semantic or text-centered similarity. In this line, \emph{SPECTER} was a turning point because it learned document embeddings from titles and abstracts while using the citation graph as supervision. This means that text and citation structure are not treated as separate information sources, but as signals that support each other \cite{cohan2020specter}. The success of SPECTER made it clear that paper similarity cannot be modeled well as only lexical overlap or only graph proximity.
+
+Later work started to question the assumption that one embedding is enough for every use case. Studies on \emph{aspect-based} and \emph{multifaceted} similarity show that two papers may be similar in terms of method but not topic, or similar in terms of data but not conclusions \cite{ostendorff2020aspect,risch2021multifaceted}. This observation is important for the present research direction because it suggests that similarity is not necessarily a one-dimensional quantity.
+
+\emph{SciNCL} moves one step further and argues that citation information should not be reduced to a binary relation of ``relevant'' versus ``not relevant.'' Instead, it uses citation-neighborhood embeddings to learn \emph{continuous similarity} through contrastive learning \cite{ostendorff2022scincl}. The need for better evaluation is also reflected in \emph{SciRepEval}, which introduces a multi-format benchmark for scientific document representations across classification, regression, ranking, and search tasks. A central conclusion of this line of work is that single-vector embeddings do not generalize equally well across tasks, and that performance depends strongly on the downstream use case \cite{singh2023scirepeval}.
+
+\subsection{Hybrid, multi-view, and time-aware methods}
+
+A third family of approaches tries to combine text and graph information directly. The main idea is that similarity between papers is multi-view: it includes topical relatedness, network proximity, historical closeness, and often the importance of individual citations. \emph{SCR-NTR} is a good example of this combination, since it joins text encoding with heterogeneous network representation learning for scientific citation recommendation \cite{qiu2021scrntr}. In the same line, the more recent work of Liang \emph{et al.} shows that not all citations inside the same graph carry the same informational value. Citation importance can vary based on position, frequency, and other features, and this difference can improve learned document representations \cite{liang2026citation}.
+
+The general conclusion from hybrid methods is that neither graph topology alone nor text semantics alone is enough in a consistent way. The best results usually appear when structural, semantic, and---increasingly---temporal signals are combined. This is especially relevant in citation networks, where time is not just an extra feature but a basic property of the graph itself.
+
+\subsection{Similarity at the researcher level}
+
+Compared with paper-level similarity, the literature on researcher-level similarity is more fragmented. Most studies do not define a clear metric of similarity between researchers. Instead, they formulate the problem as a recommendation task: finding potential collaborators, topic-sensitive experts, or relevant scholars. \emph{HNERec} learns researcher representations on heterogeneous scholarly networks by combining topics, co-authorship, venue relations, and citation relations, and then uses similarity in the embedding space for collaborator recommendation \cite{liu2023hnerec}. In a similar way, \emph{MA-ACR} uses metapaths, attention, and node attributes in heterogeneous academic networks to improve scholar representations before computing similarity \cite{li2024maacr}.
+
+The most recent trend moves the problem toward dynamic and semantically enriched collaboration networks. For example, \emph{TEDRec} introduces temporal modeling and textual edge information in order to capture not only who collaborated with whom, but also when and in what research context \cite{guan2025tedrec}. Even with this progress, the literature still lacks a unified and interpretable formulation for how similarity between two researchers should be defined from their publications. At this point, the work of Varga \emph{et al.} is especially relevant because it treats author similarity as a consistent extension of paper similarity, rather than as a separate recommender heuristic \cite{varga2025transition}.
+
+\subsection{Benchmarks, evaluation, and the research gap}
+
+The maturity of the field at the paper level is due in part to the availability of suitable benchmarks. The \emph{RELISH} dataset provided a large expert-curated collection for evaluating document similarity in biomedical literature search \cite{brown2019relish}, while \emph{SciRepEval} pushed evaluation beyond simple retrieval settings and showed that the choice of representation is closely tied to the kind of downstream task \cite{singh2023scirepeval}. At the researcher level, evaluation is still often indirect. It is usually based on success in collaborator recommendation, without carefully testing whether the resulting similarity is interpretable, stable, symmetric, or transferable to other scientometric tasks.
+
+Based on the literature above, the main research gap is not simply the creation of another embedding model. The real challenge is to build a unified similarity framework that: (i) combines citation structure, semantics, and time, (ii) remains interpretable in terms of operators or stochastic processes on the scholarly graph, and (iii) moves in a consistent way from paper similarity to researcher similarity. This direction is especially promising for an operator-centered dissertation, because it allows similarity to be written not only as the output of a black-box model, but as a composition of second-order operators, learned representations, and temporal weights on the same unified graph.
+
+Overall, the international literature of the last decade leads to a clear conclusion: \emph{paper-level similarity} is now a relatively mature problem, but the move toward \emph{researcher-level similarity} remains open if one wants to keep interpretability while also preserving information about time, citation heterogeneity, and the multi-dimensional semantics of scientific texts. This is exactly where the strongest research opportunity of the present project can be located.
+
 
 \bibliographystyle{plainnat}
 \bibliography{references}

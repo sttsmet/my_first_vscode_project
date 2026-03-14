@@ -7,7 +7,6 @@ LaTeX article scaffold for the paper:
 ## Structure
 
 - `main.tex`: main LaTeX entry point
-- `sections/`: modular section files
 - `references.bib`: bibliography database
 - `figures/`: place figures here
 
